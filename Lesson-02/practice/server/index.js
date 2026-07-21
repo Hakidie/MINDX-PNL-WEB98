@@ -6,16 +6,31 @@ const app = express();
 app.use(express.json());
 
 // 1. Get all customer
-app.get('/customers', (req, res) => {
-    res.json(customers);
+app.get('/customers', async (req, res) => {
+    try {
+        const allCustomers = await customers.find();
+        res.json(allCustomers);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
-app.get('/orders', (req, res) => {
-    res.json(orders);
+app.get('/orders', async (req, res) => {
+    try {
+        const allOrders = await orders.find();
+        res.json(allOrders);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
-app.get('/products', (req, res) => {
-    res.json(products);
+app.get('/products', async (req, res) => {
+    try {
+        const allProducts = await products.find();
+        res.json(allProducts);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
 // 2. Get customer by id
