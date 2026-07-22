@@ -6,28 +6,25 @@ const app = express();
 app.use(express.json());
 
 // 1. Get all customer
-app.get('/customers', async (req, res) => {
+app.get('/customers', (req, res) => {
     try {
-        const allCustomers = await customers.find();
-        res.json(allCustomers);
+        res.json(customers);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
 
-app.get('/orders', async (req, res) => {
+app.get('/orders', (req, res) => {
     try {
-        const allOrders = await orders.find();
-        res.json(allOrders);
+        res.json(orders);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
 
-app.get('/products', async (req, res) => {
+app.get('/products', (req, res) => {
     try {
-        const allProducts = await products.find();
-        res.json(allProducts);
+        res.json(products);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -80,7 +77,7 @@ app.post('/customers', (req, res) => {
 
     const newCustomer = { id: newId, name, email, age };
 
-    customers.push(newCustommer);
+    customers.push(newCustomer);
     res.json(customers);
 });
 
@@ -97,7 +94,7 @@ app.post('/orders', (req, res) => {
         return res.status(404).json({ message: "Product not found" });
     }
 
-    if (quantity > product.quanity || quantity < 1) {
+    if (quantity > product.quantity || quantity < 1) {
         return res.status(400).json({ message: "Invalid quantity" });
     }
     
@@ -112,6 +109,51 @@ app.post('/orders', (req, res) => {
 
     orders.push(newOrder);
     res.json(orders);
+});
+
+// 8. PUT quantity of an order by id
+app.put('/orders/:id', (req, res) => {
+    const { quantity } = req.body || {};
+
+    const orderId = req.params.id;
+    const order = orders.find(o => o.id === orderId);
+    if (!order) {
+        return res.status(404).json({ message: "Không tìm thấy đơn hàng" });
+    }
+    
+    const product = products.find(p => p.id === order.productId);
+    if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+    }
+
+    if (quantity > product.quantity || quantity < 1) {
+        return res.status(400).json({ message: "Invalid quantity" });
+    }
+
+    const totalPrice = quantity * product.price;
+
+    order.quantity = quantity;
+    order.totalPrice = totalPrice;
+
+    res.status(200).json(order);
+});
+
+// 9. DEL a customer by id
+app.delete('/customers/:id', (req, res) => {
+    const id = req.params.id;
+
+    const index = customers.findIndex(c => c.id === id);
+
+    if (index === -1) {
+        return res.status(404).json({ message: "Không tìm thấy khách hàng" });
+    }
+
+    const deletedCustomer = customers.splice(index, 1);
+
+    res.status(200).json({
+        message: "Xóa khách hàng thành công",
+        customer: deletedCustomer[0], 
+    });
 });
 
 
