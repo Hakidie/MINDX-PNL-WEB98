@@ -1,12 +1,14 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-import customerRoutes from './routes/customerRoutes.js';
-import orderRoutes from './routes/orderRoutes.js';
-import productRoutes from './routes/productRoutes.js';
+import authRoutes from './routes/AuthRoutes.js';
+import accountRoutes from './routes/AccountRoutes.js';
+import managerRoutes from './routes/ManagerRoutes.js';
+import propertyRoutes from './routes/PropertyRoutes.js';
+// import orderRoutes from './routes/orderRoutes.js';
+// import productRoutes from './routes/productRoutes.js';
 
 // .env setup
 dotenv.config();
@@ -20,9 +22,12 @@ app.use(express.json()); // For input body
 
 
 
-app.use('/', customerRoutes);
-app.use('/', orderRoutes);
-app.use('/', productRoutes);
+app.use('/', authRoutes);
+app.use('/', accountRoutes);
+app.use('/', managerRoutes);
+app.use('/', propertyRoutes);
+// app.use('/', orderRoutes);
+// app.use('/', productRoutes);
 
 app.listen(process.env.PORT, () => {
     console.log('Server is running!');

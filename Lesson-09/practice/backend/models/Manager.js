@@ -29,4 +29,4 @@ const managerSchema = new mongoose.Schema({
     },
 }, { timestamps: true });
 
-module.exports = mongoose.model('Manager', managerSchema);
+export default mongoose.model('Manager', managerSchema);

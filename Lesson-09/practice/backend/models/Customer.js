@@ -3,7 +3,6 @@ import mongoose from 'mongoose';
 const customerSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true,
         trim: true,
     },
     email: {
@@ -14,7 +13,6 @@ const customerSchema = new mongoose.Schema({
     },
     phone: {
         type: String,
-        required: true,
         trim: true,
     },
     address: {
@@ -28,4 +26,4 @@ const customerSchema = new mongoose.Schema({
     },
 }, { timestamps: true });
 
-module.exports = mongoose.model('Customer', customerSchema);
+export default mongoose.model('Customer', customerSchema);
