@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import AccountsModel from '../models/Account.js';
 import EmployeesModel from '../models/Employee.js';
-import ManagersModel from '../models/Manager.js';
+import { resolveAccountProfile } from '../utils/resolveAccountProfile.js';
 
 // Register emplyee
 export const registerEmployee = async (req, res) => {
@@ -23,10 +23,7 @@ export const registerEmployee = async (req, res) => {
         const hash = await bcrypt.hash(password, 10);
 
         // Get employee's manager info
-        const managerInfo = await ManagersModel.findOne({ accountId: req.account.id });
-        if (!managerInfo) {
-            return res.status(404).json({ message: "Manager not found", success: false });
-        }
+        const managerInfo = await resolveAccountProfile(req);
 
         // Create account for employee
         const newAccount = await AccountsModel.create({
@@ -58,9 +55,36 @@ export const registerEmployee = async (req, res) => {
             success: true
         });
     } catch (error) {
-        res.status(400).send({
+        res.status(error.status || 400).send({
             message: error.message,
             success: false
         });
     }
 };
+
+// Get all employees under a manager management
+export const GetAllEmployeesOfAManager = async (req, res) => {
+    try {
+        // Get employees's manager info
+        const managerInfo = await resolveAccountProfile(req);
+
+        // Get all manager's employees
+        const employees = await EmployeesModel.find({ managerId: managerInfo._id });
+        if (employees.length === 0) {
+           return res.status(404).json({ message: "No employee", success: false }); 
+        }
+
+        res.status(200).send({
+            message: 'Found all employee!',
+            data: employees,
+            success: true
+        });
+    } catch (error) {
+        res.status(error.status || 400).send({
+            message: error.message,
+            success: false
+        });
+    };
+};
+
+

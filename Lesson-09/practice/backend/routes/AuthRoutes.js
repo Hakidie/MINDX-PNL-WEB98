@@ -11,6 +11,5 @@ import { registerEmployee } from '../controllers/EmployeeController.js';
 router.post('/auth/register', register);
 router.post('/auth/login', login);
 router.post('/auth/managers/register', registerManager);
-router.post('/auth/employees/register', authJWT, authorizeRoles('MANAGER'), registerEmployee);
 
 export default router;
