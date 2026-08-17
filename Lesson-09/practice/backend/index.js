@@ -6,6 +6,7 @@ import jwt from 'jsonwebtoken';
 import authRoutes from './routes/AuthRoutes.js';
 import accountRoutes from './routes/AccountRoutes.js';
 import managerRoutes from './routes/ManagerRoutes.js';
+import employeeRoutes from './routes/EmployeeRoutes.js';
 import propertyRoutes from './routes/PropertyRoutes.js';
 // import orderRoutes from './routes/orderRoutes.js';
 // import productRoutes from './routes/productRoutes.js';
@@ -25,6 +26,7 @@ app.use(express.json()); // For input body
 app.use('/', authRoutes);
 app.use('/', accountRoutes);
 app.use('/', managerRoutes);
+app.use('/', employeeRoutes);
 app.use('/', propertyRoutes);
 // app.use('/', orderRoutes);
 // app.use('/', productRoutes);
