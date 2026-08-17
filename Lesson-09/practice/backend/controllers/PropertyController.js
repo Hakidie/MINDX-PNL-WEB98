@@ -1,7 +1,8 @@
 import PropertiesModel from '../models/Property.js';
 import { resolvePropertyEmployeeId } from '../utils/resolvePropertyEmployeeId.js';
+import { resolveAccountProfile } from '../utils/resolveAccountProfile.js';
 
-// Add a post
+// Add a property
 export const addPropertyInfo = async (req, res) => {
     try {
         const { address, price, area, status } = req.body;
@@ -72,4 +73,29 @@ export const updatePropertyInfo = async (req, res) => {
             success: false
         });
     }
+};
+
+// Get all employee's properties
+export const GetAllPropertiesOfAnEmployee = async (req, res) => {
+    try {
+        // Get employees info
+        const employeeInfo = await resolveAccountProfile(req);
+
+        // Get all employee's properties
+        const properties = await PropertiesModel.find({ employeeId: employeeInfo._id });
+        if (properties.length === 0) {
+           return res.status(404).json({ message: "No properties", success: false });
+        }
+
+        res.status(200).send({
+            message: 'Found all properties!',
+            data: properties,
+            success: true
+        });
+    } catch (error) {
+        res.status(error.status || 400).send({
+            message: error.message,
+            success: false
+        });
+    };
 };
