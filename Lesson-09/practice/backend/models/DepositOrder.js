@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
 
 const depositOrderSchema = new mongoose.Schema({
     customerId: {
@@ -27,4 +27,4 @@ const depositOrderSchema = new mongoose.Schema({
     },
 }, { timestamps: true });
 
-module.exports = mongoose.model('DepositOrder', depositOrderSchema);
+export default mongoose.model('DepositOrder', depositOrderSchema);

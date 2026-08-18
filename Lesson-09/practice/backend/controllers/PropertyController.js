@@ -36,7 +36,7 @@ export const addPropertyInfo = async (req, res) => {
     }
 };
 
-// Update a post
+// Update a property info
 export const updatePropertyInfo = async (req, res) => {
     try {
         const { address, price, area, status, propertyId } = req.body;
